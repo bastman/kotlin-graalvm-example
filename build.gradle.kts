@@ -8,6 +8,7 @@ plugins {
 
     // From the Gradle Plugin Portal
     id("com.bmuschko.docker-java-application") version "3.1.0"
+    id("com.github.johnrengelman.plugin-shadow") version "2.0.3"
 }
 
 group = "com.example"
