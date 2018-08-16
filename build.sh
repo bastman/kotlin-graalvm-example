@@ -40,3 +40,12 @@ ${GRADLE_COMMAND}
 
 # compile to native binary
 ${COMPILER_COMMAND}
+
+set -e +x
+
+echo ""
+echo "Done."
+echo "You may want to run your compiled binary ..."
+echo ""
+echo "Example: $ ./${COMPILER_SINK_FILE}"
+echo ""
