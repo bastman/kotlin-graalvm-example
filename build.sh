@@ -1,13 +1,27 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 set -e
 
+# sdk use java 1.0.0-rc5-graal
+alias native-image="$HOME/.sdkman/candidates/java/1.0.0-rc5-graal/bin/native-image"
+java -version
+native-image --version
+
 GRAALVM_HOME="$HOME/.sdkman/candidates/java/1.0.0-rc5-graal"
+
 MAIN_CLASS_NAME="com.example.demo.App"
 COMPILER_SINK_FILE="build/helloworld"
-COMPILER="$GRAALVM_HOME/bin/native-image"
 GRADLE_COMMAND="./gradlew clean shadowJar"
 GRADLE_SINK_JAR="./build/libs/kotlin-graalvm-example-1.0-SNAPSHOT-all.jar"
-COMPILER_COMMAND="$COMPILER -cp ${GRADLE_SINK_JAR} -H:Name=${COMPILER_SINK_FILE} -H:Class=${MAIN_CLASS_NAME} -H:+ReportUnsupportedElementsAtRuntime"
+
+#OPTS=""
+OPTS="-H:+ReportUnsupportedElementsAtRuntime -H:ReflectionConfigurationFiles=./reflection-001.json"
+#OPTS="-H:ReflectionConfigurationFiles=./reflection.json -H:+ReportUnsupportedElementsAtRuntime -Dfile.encoding=UTF-8"
+#-H:PrintFlags=Expert
+#  --expert-options
+#OPTS="-H:+ReportUnsupportedElementsAtRuntime -Dfile.encoding=UTF-8"
+
+COMPILER_COMMAND="--verbose -cp ${GRADLE_SINK_JAR} -H:Name=${COMPILER_SINK_FILE} -H:Class=${MAIN_CLASS_NAME} ${OPTS}"
+
 
 echo "===== build & compile to native binary .... ===="
 echo ""
@@ -27,19 +41,16 @@ echo "   - binary file: ${COMPILER_SINK_FILE}"
 echo "   - main class name: ${MAIN_CLASS_NAME}"
 echo " processor:"
 echo "   - graalvm home: $GRAALVM_HOME"
-echo "   - compiler: $COMPILER"
 echo " "
 echo "============================================="
 
-# check compiler exists
-ls -la $COMPILER > /dev/null
 
 # gradle build jar
 set -ex
 ${GRADLE_COMMAND}
 
 # compile to native binary
-${COMPILER_COMMAND}
+native-image ${COMPILER_COMMAND}
 
 set -e +x
 

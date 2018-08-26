@@ -1,0 +1,8 @@
+[
+  {
+    "xname" : " java.util.Properties",
+    "name" : " com.example.demo.CustomMap",
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true
+  }
+]
